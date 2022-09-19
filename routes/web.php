@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MahasiswaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+// Route::get('mahasiswa/pdf', [MahasiswaController::class, 'cetak_pdf']);
+// Route::resource('mahasiswa', MahasiswaController::class);
+
+Route::prefix('mahasiswa')->group(function () {
+    Route::get('index', [MahasiswaController::class, 'index'])->name('index');
+    Route::get('create', [MahasiswaController::class, 'create'])->name('create');
+    Route::post('create/store', [MahasiswaController::class, 'store'])->name('store');
+    Route::get('edit/{mahasiswa}', [MahasiswaController::class, 'edit'])->name('edit');
+    Route::post('edit/update/{mahasiswa}', [MahasiswaController::class, 'update'])->name('update');
+    Route::get('delete', [MahasiswaController::class, 'delete'])->name('delete');
 });
