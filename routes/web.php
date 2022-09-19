@@ -18,7 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('mahasiswa/pdf', [MahasiswaController::class, 'cetak_pdf']);
+Route::get('mahasiswa/pdf', [MahasiswaController::class, 'cetak_pdf']);
 // Route::resource('mahasiswa', MahasiswaController::class);
 
 Route::prefix('mahasiswa')->group(function () {
@@ -27,5 +27,7 @@ Route::prefix('mahasiswa')->group(function () {
     Route::post('create/store', [MahasiswaController::class, 'store'])->name('store');
     Route::get('edit/{mahasiswa}', [MahasiswaController::class, 'edit'])->name('edit');
     Route::post('edit/update/{mahasiswa}', [MahasiswaController::class, 'update'])->name('update');
-    Route::get('delete', [MahasiswaController::class, 'delete'])->name('delete');
+    Route::get('delete/{mahasiswa}', [MahasiswaController::class, 'destroy'])->name('delete');
+   
 });
+

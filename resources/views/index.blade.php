@@ -48,6 +48,7 @@
                 style="max-width: 100px;"></td>
                 <td>
                     <a href="/mahasiswa/edit/{{$list->id_mahasiswa}}" class="btn btn-success">Edit</a>
+                    <a href="/mahasiswa/delete/{{$list->id_mahasiswa}}" class="btn btn-danger" onclick="return confirm('Hapus data mahasiswa {{ $list->name }}?')">Hapus</a>
                 </td>
             </tr>
             @endforeach

@@ -7,6 +7,8 @@ use App\Models\Mahasiswa;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Pdf;
+
 
 class MahasiswaController extends Controller
 {
@@ -103,11 +105,11 @@ class MahasiswaController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => 'required|string|max:50',
-            'username' => 'required|alpha_dash|min:4|max:20|unique:App\Models\Mahasiswa',
-            'email' => 'required|email:dns|unique:App\Models\Mahasiswa',
-            'password' => 'required|min:5',
-            'avatar' => 'required|image|mimes:jpg,jpeg,png'
+            'name' => 'string|max:50',
+            'username' => 'alpha_dash|min:4|max:20|unique:App\Models\Mahasiswa',
+            'email' => 'email:dns|unique:App\Models\Mahasiswa',
+            'password' => 'min:5',
+            'avatar' => 'image|mimes:jpg,jpeg,png'
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -117,7 +119,7 @@ class MahasiswaController extends Controller
         }
 
         $file = $request->file('avatar');
-        $image_name = $file->getClientOriginalName();
+        $image_name = '';
 
         if($file){
             $image_name = $file->store('images', 'public');
@@ -126,15 +128,24 @@ class MahasiswaController extends Controller
             }
         }
 
-        Mahasiswa::where('id_mahasiswa', $id)->update([
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'avatar' => $image_name
-        ]);
+        if(!empty($request->file('avatar'))){
+            Mahasiswa::where('id_mahasiswa', $mahasiswa)->update([
+                'name' => $request->name,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'avatar' => $image_name
+            ]);
+        }else{
+            Mahasiswa::where('id_mahasiswa', $mahasiswa)->update([
+                'name' => $request->name,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+        }
 
-        return view('edit')->with('id', $id)->with('data', $data)
-                           ->with('success', 'data berhasil diupdate');
+        return redirect('mahasiswa/index')->with('mahasiswa', $mahasiswa)->with('success', 'data berhasil diupdate');
     }
 
     /**
@@ -145,12 +156,16 @@ class MahasiswaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Mahasiswa::where('id_mahasiswa',$mahasiswa)->delete();
+        return redirect()->back()->with('success','Berhasil menghapus data');
     }
 
     public function cetak_pdf()
     {
         $data = Mahasiswa::all();
+        
+        //return view('cetak_pdf', ['data' => $data]);
+
         $pdf = Pdf::loadView('cetak_pdf', ['data' => $data]);
         return $pdf->stream();
     }

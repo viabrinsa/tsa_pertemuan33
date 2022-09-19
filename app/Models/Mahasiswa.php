@@ -12,4 +12,6 @@ class Mahasiswa extends Model
     protected $table="mahasiswa";
     protected $primaryKey = 'id_mahasiswa';
     protected $fillable=['name', 'username', 'email', 'password', 'avatar'];
+
+    public $timestamps = false;
 }
