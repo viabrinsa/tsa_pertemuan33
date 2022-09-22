@@ -27,7 +27,8 @@
 </head>
 <body>
     <div class="container">
-        <a href="{{route('create')}}" class="btn btn-primary mt-3">Tambah Data</a>
+        <a href="{{route('create')}}" class="btn btn-primary mt-3 mb-3">Tambah Data</a>
+        <a href="{{route('cetakpdf')}}" target="_blank" class="btn btn-success mt-3 mb-3">Cetak PDF</a>
         <table align="center" border="2">
             <tr>
                 <th>No</th>
@@ -48,7 +49,7 @@
                 style="max-width: 100px;"></td>
                 <td>
                     <a href="/mahasiswa/edit/{{$list->id_mahasiswa}}" class="btn btn-success">Edit</a>
-                    <a href="/mahasiswa/delete/{{$list->id_mahasiswa}}" class="btn btn-danger" onclick="return confirm('Hapus data mahasiswa {{ $list->name }}?')">Hapus</a>
+                    <a href="/mahasiswa/delete/{{$list->id_mahasiswa}}" class="btn btn-danger" onclick="return confirm('Yakin hapus data mahasiswa {{ $list->name }}?')">Hapus</a>
                 </td>
             </tr>
             @endforeach

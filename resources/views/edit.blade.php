@@ -7,6 +7,7 @@
 </head>
 <body>
     <div class="container">
+    	<a href="{{route('index')}}" class="btn btn-secondary mt-3">Kembali</a>
         <h2> Edit Mahasiswa </h2>
         <form method="post" action="{{route('update',$mahasiswa->id_mahasiswa)}}" enctype="multipart/form-data">
         	@csrf

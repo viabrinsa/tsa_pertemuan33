@@ -13,5 +13,5 @@ class Mahasiswa extends Model
     protected $primaryKey = 'id_mahasiswa';
     protected $fillable=['name', 'username', 'email', 'password', 'avatar'];
 
-    public $timestamps = false;
+    
 }

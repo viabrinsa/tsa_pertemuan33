@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Mahasiswa;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Pdf;
+
 
 
 class MahasiswaController extends Controller
@@ -21,6 +22,12 @@ class MahasiswaController extends Controller
     {
         $data = Mahasiswa::get();
         return view('index', compact('data'));
+    }
+
+    public function cetak_pdf()
+    {
+        $data = Mahasiswa::all();
+        return view('cetak_pdf', compact('data'));
     }
 
     /**
@@ -95,14 +102,7 @@ class MahasiswaController extends Controller
         return view('edit', ['mahasiswa' => $mahasiswa]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, $mahasiswa)
     {
         $rules = [
             'name' => 'string|max:50',
@@ -112,12 +112,14 @@ class MahasiswaController extends Controller
             'avatar' => 'image|mimes:jpg,jpeg,png'
         ];
 
+        
         $validator = Validator::make($request->all(), $rules);
         
         if($validator->fails()){
             return view('create')->with('error', $validator->errors());
         }
 
+        $data = Mahasiswa::all();
         $file = $request->file('avatar');
         $image_name = '';
 
@@ -147,26 +149,10 @@ class MahasiswaController extends Controller
 
         return redirect('mahasiswa/index')->with('mahasiswa', $mahasiswa)->with('success', 'data berhasil diupdate');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy($mahasiswa)
     {
         Mahasiswa::where('id_mahasiswa',$mahasiswa)->delete();
         return redirect()->back()->with('success','Berhasil menghapus data');
     }
 
-    public function cetak_pdf()
-    {
-        $data = Mahasiswa::all();
-        
-        //return view('cetak_pdf', ['data' => $data]);
-
-        $pdf = Pdf::loadView('cetak_pdf', ['data' => $data]);
-        return $pdf->stream();
-    }
 }
